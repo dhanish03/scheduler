@@ -2,15 +2,15 @@
 
 :root {
   --primary-color: #4CAF50;
-  --primary-hover: #3d8b40;
+  --primary-hover: #388E3C;
   --secondary-color: #2196F3;
-  --text-primary: #263238;
-  --text-secondary: #546E7A;
-  --background: #F5F7FA;
-  --card-bg: #FFFFFF;
-  --border-radius: 12px;
-  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.08);
+  --text-primary: #1A252F;
+  --text-secondary: #607D8B;
+  --background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --border-radius: 15px;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
   --transition: all 0.3s ease;
 }
 
@@ -22,106 +22,151 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: var(--background);
+  background: var(--background);
   color: var(--text-primary);
   line-height: 1.6;
   padding: 0;
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Container */
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
 }
 
 /* App Header */
 .app-header {
   text-align: center;
   margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: linear-gradient(90deg, #E3F2FD, #F5F7FA);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .app-description {
   color: var(--text-secondary);
-  font-size: 1.1rem;
-  max-width: 600px;
+  font-size: 1.2rem;
+  max-width: 700px;
   margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* App Content */
+.app-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
 }
 
 /* Upload Container */
 .upload-container {
-  background-color: var(--card-bg);
+  background: var(--card-bg);
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  padding: 2rem;
-  margin-bottom: 3rem;
+  box-shadow: var(--shadow-md);
+  padding: 2.5rem;
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 650px;
   text-align: center;
+  border: 3px dashed #B0BEC5;
+  background: linear-gradient(135deg, #FFFFFF, #ECEFF1);
+  transition: var(--transition);
+}
+
+.upload-container:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-color: var(--primary-color);
+  transform: translateY(-5px);
 }
 
 .upload-container h2 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .upload-area {
   border: 2px dashed #BDBDBD;
   border-radius: var(--border-radius);
-  padding: 2.5rem 1.5rem;
+  padding: 3rem 2rem;
   cursor: pointer;
   transition: var(--transition);
   background-color: #FAFAFA;
+  margin: 1rem 0;
 }
 
-.upload-area:hover {
+.upload-area.drag-over {
   border-color: var(--primary-color);
-  background-color: #F1F8E9;
+  background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
 }
 
-.upload-icon {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
+.upload-icon svg {
+  width: 60px;
+  height: 60px;
+  fill: var(--primary-color);
+  transition: var(--transition);
+}
+
+.upload-area:hover .upload-icon svg {
+  fill: var(--primary-hover);
 }
 
 .upload-text {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   margin-bottom: 1.5rem;
   color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .upload-button {
-  background-color: var(--primary-color);
+  background: linear-gradient(90deg, var(--primary-color), #66BB6A);
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.9rem 2rem;
   border-radius: 30px;
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
   cursor: pointer;
-  display: inline-block;
   transition: var(--transition);
   border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .upload-button:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
+  background: linear-gradient(90deg, var(--primary-hover), #43A047);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .upload-hint {
-  margin-top: 1rem;
-  font-size: 0.875rem;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
   color: #9E9E9E;
+  font-style: italic;
 }
 
 .hidden-input {
@@ -134,17 +179,22 @@ h1 {
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  margin: 2rem 0;
+  margin: 2rem auto;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  width: 90%;
+  max-width: 400px;
 }
 
 .loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(76, 175, 80, 0.2);
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(76, 175, 80, 0.3);
   border-radius: 50%;
   border-top-color: var(--primary-color);
   animation: spin 1s infinite ease-in-out;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 @keyframes spin {
@@ -153,78 +203,84 @@ h1 {
 
 /* Schedule Table */
 .schedule-container {
-  background-color: var(--card-bg);
+  background: var(--card-bg);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
-  padding: 2rem;
-  margin-top: 2rem;
+  padding: 2.5rem;
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 1200px;
 }
 
 .schedule-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
   text-align: center;
   color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .session-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
 }
 
 .session-card {
-  background-color: var(--card-bg);
+  background: var(--card-bg);
   border-radius: var(--border-radius);
-  border: 1px solid #ECEFF1;
+  border: 1px solid #E0E0E0;
   overflow: hidden;
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .session-card:hover {
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
 }
 
 .session-header {
-  padding: 1.25rem;
-  background-color: #F5F5F5;
+  padding: 1.5rem;
+  background: linear-gradient(90deg, #F5F5F5, #ECEFF1);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .session-header h3 {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
 }
 
 .candidate-count {
-  background-color: var(--primary-color);
+  background: linear-gradient(90deg, var(--primary-color), #66BB6A);
   color: white;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.9rem;
   border-radius: 999px;
   font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .session-divider {
-  height: 1px;
-  background-color: #E0E0E0;
+  height: 2px;
+  background: linear-gradient(to right, #E0E0E0, #B0BEC5);
 }
 
 .candidate-list {
   list-style: none;
   padding: 0;
-  max-height: 250px;
+  max-height: 280px;
   overflow-y: auto;
 }
 
 .candidate-item {
-  padding: 0.75rem 1.25rem;
+  padding: 0.9rem 1.5rem;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #F0F0F0;
@@ -236,15 +292,15 @@ h1 {
 }
 
 .candidate-item:hover {
-  background-color: #F9F9F9;
+  background: linear-gradient(90deg, #F9F9F9, #F5F5F5);
 }
 
 .candidate-number {
   font-weight: 500;
-  margin-right: 0.75rem;
+  margin-right: 0.9rem;
   color: var(--primary-color);
-  font-size: 0.875rem;
-  width: 24px;
+  font-size: 0.95rem;
+  width: 28px;
   text-align: right;
 }
 
@@ -253,20 +309,17 @@ h1 {
 }
 
 .empty-session {
-  padding: 1rem;
+  padding: 1.2rem;
   text-align: center;
   color: var(--text-secondary);
   font-style: italic;
+  font-size: 1rem;
 }
 
-/* App Footer */
-.app-footer {
-  margin-top: 4rem;
+.total-count {
   text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #ECEFF1;
+  margin-top: 1rem;
+  color: #607D8B;
 }
 
 /* Responsive adjustments */
@@ -274,13 +327,19 @@ h1 {
   .container {
     padding: 1rem;
   }
-  
   .session-grid {
     grid-template-columns: 1fr;
   }
-  
   .upload-container,
   .schedule-container {
     padding: 1.5rem;
+    width: 95%;
+    max-width: 500px;
+  }
+  h1 {
+    font-size: 2.2rem;
+  }
+  .app-header {
+    margin-bottom: 2rem;
   }
 }

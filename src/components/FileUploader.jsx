@@ -1,47 +1,90 @@
+import { useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
+import Papa from 'papaparse';
 
-export default function FileUploader({ onDataLoaded }) {
-  const handleUpload = (e) => {
-    const file = e.target.files[0];
+export default function FileUploader({ onDataLoaded, onError }) {
+  const fileInputRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleUpload = (file) => {
     if (!file) return;
 
+    const fileType = file.name.split('.').pop().toLowerCase();
+    if (!['xlsx', 'xls', 'csv'].includes(fileType)) {
+      onError('Unsupported file type. Please upload CSV or Excel.');
+      return;
+    }
+
     const reader = new FileReader();
-    
+
     reader.onload = (evt) => {
-      const data = new Uint8Array(evt.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-      onDataLoaded(sheet); // send data to parent
+      try {
+        let data = [];
+        if (fileType === 'xlsx' || fileType === 'xls') {
+          const workbook = XLSX.read(evt.target.result, { type: 'array' });
+          data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        } else if (fileType === 'csv') {
+          const parsed = Papa.parse(evt.target.result, { header: true, skipEmptyLines: true });
+          if (parsed.errors.length) throw new Error('Invalid CSV format');
+          data = parsed.data;
+        }
+
+        // Normalize data (same as original logic)
+        const normalizedData = data.map((row) => ({
+          Name: row.Name || row.name || '',
+          'April 14': row['April 14'] || row.april_14 || 'None',
+          'April 15': row['April 15'] || row.april_15 || 'None',
+          'April 16': row['April 16'] || row.april_16 || 'None',
+        }));
+
+        // Validate data
+        if (normalizedData.some((row) => !row.Name)) {
+          throw new Error('Missing "Name" column or invalid data');
+        }
+
+        onDataLoaded(normalizedData);
+      } catch (err) {
+        onError(`Error parsing file: ${err.message}`);
+      }
     };
-    
-    reader.readAsArrayBuffer(file);
+
+    if (fileType === 'xlsx' || fileType === 'xls') {
+      reader.readAsArrayBuffer(file);
+    } else {
+      reader.readAsText(file);
+    }
   };
-  
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    handleUpload(e.dataTransfer.files[0]);
+  };
+
   return (
     <div className="upload-container">
       <h2>Upload Schedule Data</h2>
-      <div className="upload-area">
-        <div className="upload-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 16L12 8" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M9 11L12 8L15 11" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M20 16.7428C21.2215 15.734 22 14.2079 22 12.5C22 9.46243 19.5376 7 16.5 7C16.2815 7 16.0771 6.886 15.9661 6.69774C14.6621 4.48484 12.2544 3 9.5 3C5.35786 3 2 6.35786 2 10.5C2 12.5661 2.83545 14.4371 4.18695 15.7935" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M16 16L16 22" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M8 16L8 22" stroke="#4CAF50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-        <p className="upload-text">Drag & drop or click to upload Excel file</p>
-        <label className="upload-button">
-          Browse Files
-          <input 
-            type="file" 
-            accept=".xlsx,.xls" 
-            onChange={handleUpload} 
-            className="hidden-input"
-          />
-        </label>
-        <p className="upload-hint">Supports .xlsx files</p>
+      <div
+        className={`upload-area ${isDragging ? 'drag-over' : ''}`}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current.click()}
+      >
+        <p className="upload-text">Drag & drop or click to upload Excel/CSV</p>
+        <button className="upload-button">Browse Files</button>
+        <p className="upload-hint">Supports .xlsx, .xls, and .csv files</p>
       </div>
+      <input
+        type="file"
+        accept=".xlsx,.xls,.csv"
+        ref={fileInputRef}
+        onChange={(e) => handleUpload(e.target.files[0])}
+        className="hidden-input"
+      />
     </div>
   );
 }
